@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image Search</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+      }
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .card {
+        margin: 10px;
+        border-radius: 10px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+      }
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+      .card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity 0.2s ease-in-out;
+      }
+      .card:hover img {
+        opacity: 0.8;
+      }
+      .search-container {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+      }
+      .search-input {
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+      .search-button {
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+        margin-left: 5px;
+      }
+      .search-button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="search-container">
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search for images..."
+      />
+      <button class="search-button">Search</button>
+    </div>
+    <div class="container"></div>
+    <script>
+      const container = document.querySelector(".container");
+      const searchInput = document.querySelector(".search-input");
+      const searchButton = document.querySelector(".search-button");
+
+      function displayImages(images) {
+        container.innerHTML = "";
+        images.forEach((image) => {
+          const card = document.createElement("div");
+          card.classList.add("card");
+          card.innerHTML = `
+            <img src="${image.urls.regular}" alt="${image.alt_description}">
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      async function fetchImages(query) {
+        const response = await fetch(
+          `/api/search${query ? `?q=${query}` : ""}`
+        );
+        const data = await response.json();
+        displayImages(data.results);
+      }
+
+      searchButton.addEventListener("click", () => {
+        const query = searchInput.value;
+        if (!query) {
+          alert("Please enter a search query.");
+          return;
+        }
+        fetchImages(query);
+      });
+
+      window.onload = function () {
+        fetchImages();
+      };
+    </script>
+  </body>
+</html>

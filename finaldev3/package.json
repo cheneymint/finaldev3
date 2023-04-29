@@ -1,0 +1,16 @@
+{
+    "name": "image-search",
+    "version": "1.0.0",
+    "description": "Image search application using Unsplash API and MongoDB",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "express": "^4.17.1",
+      "express-basic-auth": "^1.2.0",
+      "mongoose": "^5.13.8",
+      "morgan": "^1.10.0"
+    }
+  }
+  
